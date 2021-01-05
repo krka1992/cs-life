@@ -95,5 +95,15 @@ namespace Life
         {
             return data[x, y];
         }
+
+        public void SaveToFile(string filename)
+        {
+
+        }
+
+        public void RestoreFromFile(string filename)
+        {
+
+        }
     }
 }

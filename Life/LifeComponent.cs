@@ -8,16 +8,17 @@ namespace Life
 {
     class LifeComponent:ContainerControl
     {
-        //private LifeObject Life;
         public LifeObject Life { get;  }
-        private int CellSize = 16;
-        private int CellPadding = 2;
+        private int CellSize = 12;
+        private int CellPadding = 1;
         private int BorderWidth = 1;
         private int LifeWidth;
         private int LifeHeight;
         public LifeComponent()
         {
             SetStyle(ControlStyles.ResizeRedraw, true);
+            DoubleBuffered = true;
+
             Life = new LifeObject();
             SetLifeSize();
         }
@@ -33,17 +34,38 @@ namespace Life
             Life.SetSize(LifeWidth, LifeHeight);
         }
 
+        private void ClickHandler(int x, int y)
+        {
+            int value = CellSize + CellPadding * 2 + BorderWidth;
+            if ((x % value == 0) || (y % value == 0)) return;
+
+            int xLife = x / value;
+            int yLife = y / value;
+
+            if (xLife >= LifeWidth) return;
+            if (yLife >= LifeHeight) return;
+
+            Life.SetPointValue(xLife, yLife, !Life.GetPointValue(xLife, yLife));
+        }
+
         protected override void OnSizeChanged(EventArgs e)
         {
             base.OnSizeChanged(e);
             SetLifeSize();
         }
 
+        protected override void OnMouseClick(MouseEventArgs e)
+        {
+            base.OnMouseClick(e);
+            ClickHandler(e.X, e.Y);
+            Invalidate();
+        }
+
         private void RenderGrid(PaintEventArgs e)
         {
-            Pen pen = new Pen(Color.FromArgb(0x00, 0x00, 0x00));
+            Pen pen = new Pen(Color.FromArgb(0x40, 0x40, 0x40));
             int x, y;
-            int value = (CellSize + CellPadding * 2 + BorderWidth);
+            int value = CellSize + CellPadding * 2 + BorderWidth;
             for (int i = 1; i < LifeWidth; i++)
             {
                 x = i * value;
@@ -58,9 +80,10 @@ namespace Life
 
         private void RenderPoints(PaintEventArgs e)
         {
-            using var brush = new SolidBrush(Color.FromArgb(0x00, 0x00, 0x00));
+            using var brush = new SolidBrush(Color.FromArgb(0x00, 0xf0, 0x00));
             Rectangle area;
             int x, y;
+            int valueSize = CellSize + CellPadding * 2 + BorderWidth;
 
             for (int i = 0; i < LifeWidth; i++)
             {
@@ -68,8 +91,8 @@ namespace Life
                 {
                     if (!Life.GetPointValue(i, j)) continue;
 
-                    x = (CellSize + CellPadding * 2 + BorderWidth) * i + CellPadding + BorderWidth;
-                    y = (CellSize + CellPadding * 2 + BorderWidth) * j + CellPadding + BorderWidth;
+                    x = valueSize * i + CellPadding + BorderWidth;
+                    y = valueSize * j + CellPadding + BorderWidth;
 
                     area = new Rectangle(new Point(x, y), new Size(CellSize, CellSize));
 
@@ -80,7 +103,7 @@ namespace Life
 
         private void Render(PaintEventArgs e)
         {
-            using var brush = new SolidBrush(Color.FromArgb(0xFF, 0xFF, 0xFF));
+            using var brush = new SolidBrush(Color.FromArgb(0, 0, 0));
             var area = new Rectangle(new Point(0, 0), new Size(this.Size.Width - 1, this.Size.Height - 1));
 
             e.Graphics.FillRectangle(brush, area);
@@ -102,6 +125,5 @@ namespace Life
             Life.Mutate();
             Invalidate();
         }
-
     }
 }

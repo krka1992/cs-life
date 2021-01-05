@@ -42,5 +42,15 @@ namespace Life
         {
             lifeComponent.UpdateLife();
         }
+
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = true;
+        }
+
+        private void buttonStop_Click(object sender, EventArgs e)
+        {
+            timer1.Enabled = false;
+        }
     }
 }

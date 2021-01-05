@@ -30,30 +30,53 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.buttonStop = new System.Windows.Forms.Button();
+            this.buttonStart = new System.Windows.Forms.Button();
             this.panelLife = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.panelSettings.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelSettings
             // 
+            this.panelSettings.Controls.Add(this.buttonStop);
+            this.panelSettings.Controls.Add(this.buttonStart);
             this.panelSettings.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSettings.Location = new System.Drawing.Point(0, 0);
             this.panelSettings.Name = "panelSettings";
-            this.panelSettings.Size = new System.Drawing.Size(511, 40);
+            this.panelSettings.Size = new System.Drawing.Size(511, 45);
             this.panelSettings.TabIndex = 0;
+            // 
+            // buttonStop
+            // 
+            this.buttonStop.Location = new System.Drawing.Point(74, 11);
+            this.buttonStop.Name = "buttonStop";
+            this.buttonStop.Size = new System.Drawing.Size(56, 23);
+            this.buttonStop.TabIndex = 0;
+            this.buttonStop.Text = "Стоп";
+            this.buttonStop.UseVisualStyleBackColor = true;
+            this.buttonStop.Click += new System.EventHandler(this.buttonStop_Click);
+            // 
+            // buttonStart
+            // 
+            this.buttonStart.Location = new System.Drawing.Point(12, 11);
+            this.buttonStart.Name = "buttonStart";
+            this.buttonStart.Size = new System.Drawing.Size(56, 23);
+            this.buttonStart.TabIndex = 0;
+            this.buttonStart.Text = "Старт";
+            this.buttonStart.UseVisualStyleBackColor = true;
+            this.buttonStart.Click += new System.EventHandler(this.buttonStart_Click);
             // 
             // panelLife
             // 
             this.panelLife.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelLife.Location = new System.Drawing.Point(0, 40);
+            this.panelLife.Location = new System.Drawing.Point(0, 45);
             this.panelLife.Name = "panelLife";
-            this.panelLife.Size = new System.Drawing.Size(511, 320);
+            this.panelLife.Size = new System.Drawing.Size(511, 315);
             this.panelLife.TabIndex = 1;
             // 
             // timer1
             // 
-            this.timer1.Enabled = true;
-            this.timer1.Interval = 200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // Form1
@@ -66,6 +89,7 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
+            this.panelSettings.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -75,6 +99,8 @@
         private System.Windows.Forms.Panel panelSettings;
         private System.Windows.Forms.Panel panelLife;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button buttonStop;
+        private System.Windows.Forms.Button buttonStart;
     }
 }
 
