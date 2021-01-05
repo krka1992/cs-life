@@ -1,11 +1,72 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Security.Cryptography;
+using System.Collections;
 
 namespace Life
 {
+    public delegate void OnStop(string message);
+
+
+
+    class LifeStateStorage
+    {
+        private Hashtable ht = new Hashtable();
+        private string prevHash = "";
+        private string currentHash = "";
+        private List<byte> currentData = new List<byte>();
+
+        public void CalcHashBegin()
+        {
+            currentData.Clear();
+            prevHash = currentHash;
+            if (currentHash != "") ht[currentHash] = 0;
+        }
+
+        public string CalcHashEnd()
+        {
+            SHA256 sha = SHA256.Create();
+            byte[] data = sha.ComputeHash(currentData.ToArray());
+            currentHash = BitConverter.ToString(data);
+            return currentHash;
+        }
+
+        public void DataAdd(int val1, int val2, bool val3)
+        {
+            currentData.Add((byte)(val1 & 0xFF));
+            currentData.Add((byte)((val1 >> 8) & 0xFF));
+            currentData.Add((byte)((val1 >> 16) & 0xFF));
+            currentData.Add((byte)((val1 >> 24) & 0xFF));
+            currentData.Add((byte)(val2 & 0xFF));
+            currentData.Add((byte)((val2 >> 8) & 0xFF));
+            currentData.Add((byte)((val2 >> 16) & 0xFF));
+            currentData.Add((byte)((val2 >> 24) & 0xFF));
+            if (val3) currentData.Add(1);
+        }
+
+        public bool IsPrevState(string hash)
+        {
+            return hash == prevHash;
+        }
+
+        public bool IsOldState(string hash)
+        {
+            return ht.ContainsKey(hash);
+        }
+
+        public void Clear()
+        {
+            ht.Clear();
+            prevHash = "";
+            currentHash = "";
+        }
+    }
+
     class LifeObject
     {
+        public OnStop OnLifeStop;
+        private LifeStateStorage StateStorage = new LifeStateStorage();
         private bool[,] data = new bool[0, 0];
 
         private void MoveData(bool[,] data)
@@ -68,10 +129,22 @@ namespace Life
             data[x, y] = value;
         }
 
+        private void StopHandler(string message)
+        {
+            StateStorage.Clear();
+
+            if (OnLifeStop == null)
+                return;
+            OnLifeStop(message);
+        }
+
         public void Mutate()
         {
             bool[,] tmpData = new bool[data.GetLength(0), data.GetLength(1)];
             int count;
+            int hasCounter = 0;
+
+            StateStorage.CalcHashBegin();
 
             for (int i = 0; i < data.GetLength(0); i++)
             {
@@ -85,10 +158,28 @@ namespace Life
                     {
                         tmpData[i, j] = count == 3;
                     }
+                    if (tmpData[i, j]) hasCounter++;
+                    StateStorage.DataAdd(i, j, tmpData[i, j]);
                 }
             }
 
             data = tmpData;
+
+            if (hasCounter == 0)
+            {
+                StopHandler("Не осталось ни одной живой клетки");
+                return;
+            }
+
+            string hash = StateStorage.CalcHashEnd();
+
+            if (StateStorage.IsPrevState(hash))
+            {
+                StopHandler("Состояние эквивалентно предыдущему");
+            }
+            else if (StateStorage.IsOldState(hash)) {
+                StopHandler("Повторилось состояние");
+            }
         }
 
         public bool GetPointValue(int x, int y)

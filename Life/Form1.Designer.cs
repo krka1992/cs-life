@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             this.panelSettings = new System.Windows.Forms.Panel();
+            this.label1 = new System.Windows.Forms.Label();
             this.buttonStop = new System.Windows.Forms.Button();
             this.buttonStart = new System.Windows.Forms.Button();
             this.panelLife = new System.Windows.Forms.Panel();
@@ -39,13 +40,23 @@
             // 
             // panelSettings
             // 
+            this.panelSettings.Controls.Add(this.label1);
             this.panelSettings.Controls.Add(this.buttonStop);
             this.panelSettings.Controls.Add(this.buttonStart);
             this.panelSettings.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelSettings.Location = new System.Drawing.Point(0, 0);
             this.panelSettings.Name = "panelSettings";
-            this.panelSettings.Size = new System.Drawing.Size(511, 45);
+            this.panelSettings.Size = new System.Drawing.Size(572, 45);
             this.panelSettings.TabIndex = 0;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(156, 15);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(73, 15);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Остановлен";
             // 
             // buttonStop
             // 
@@ -72,7 +83,7 @@
             this.panelLife.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLife.Location = new System.Drawing.Point(0, 45);
             this.panelLife.Name = "panelLife";
-            this.panelLife.Size = new System.Drawing.Size(511, 315);
+            this.panelLife.Size = new System.Drawing.Size(572, 315);
             this.panelLife.TabIndex = 1;
             // 
             // timer1
@@ -83,13 +94,14 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(511, 360);
+            this.ClientSize = new System.Drawing.Size(572, 360);
             this.Controls.Add(this.panelLife);
             this.Controls.Add(this.panelSettings);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panelSettings.ResumeLayout(false);
+            this.panelSettings.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -101,6 +113,7 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Button buttonStop;
         private System.Windows.Forms.Button buttonStart;
+        private System.Windows.Forms.Label label1;
     }
 }
 

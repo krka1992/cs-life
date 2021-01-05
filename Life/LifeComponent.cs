@@ -8,6 +8,7 @@ namespace Life
 {
     class LifeComponent:ContainerControl
     {
+        public OnStop OnLifeStop;
         public LifeObject Life { get;  }
         private int CellSize = 12;
         private int CellPadding = 1;
@@ -20,6 +21,7 @@ namespace Life
             DoubleBuffered = true;
 
             Life = new LifeObject();
+            Life.OnLifeStop = OnLifeStopHandler;
             SetLifeSize();
         }
 
@@ -99,6 +101,13 @@ namespace Life
                     e.Graphics.FillRectangle(brush, area);
                 }
             }
+        }
+
+        private void OnLifeStopHandler(string message)
+        {
+            if (OnLifeStop == null)
+                return;
+            OnLifeStop(message);
         }
 
         private void Render(PaintEventArgs e)

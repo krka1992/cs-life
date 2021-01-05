@@ -22,6 +22,7 @@ namespace Life
         public void InitLife()
         {
             lifeComponent = new LifeComponent();
+            lifeComponent.OnLifeStop = OnLifeStop;
             lifeComponent.Parent = panelLife;
             lifeComponent.Dock = DockStyle.Fill;
             lifeComponent.Life.SetPointValue(5, 5, true);
@@ -36,6 +37,7 @@ namespace Life
         private void Form1_Load(object sender, EventArgs e)
         {
             InitLife();
+            ChangeStateLife(false, "Остановлено");
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -43,14 +45,27 @@ namespace Life
             lifeComponent.UpdateLife();
         }
 
+        private void ChangeStateLife(bool alive, string message)
+        {
+            timer1.Enabled = alive;
+            buttonStart.Enabled = !alive;
+            buttonStop.Enabled = alive;
+            label1.Text = message;
+        }
+
         private void buttonStart_Click(object sender, EventArgs e)
         {
-            timer1.Enabled = true;
+            ChangeStateLife(true, "Запущено");
         }
 
         private void buttonStop_Click(object sender, EventArgs e)
         {
-            timer1.Enabled = false;
+            ChangeStateLife(false, "Остановлено");
+        }
+
+        private void OnLifeStop(string message)
+        {
+            ChangeStateLife(false, "Остановлено: " + message);
         }
     }
 }
